@@ -1,5 +1,6 @@
 package model
 
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.joda.time.DateTime
 
@@ -20,4 +21,11 @@ data class Post(
 data class NewPost(
     val author: String?,
     val content: String
+)
+
+fun ResultRow.toPost() = Post(
+    this[Posts.id],
+    this[Posts.author],
+    this[Posts.content],
+    this[Posts.createdDate]
 )

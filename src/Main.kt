@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import data.DatabaseHelper
+import data.repository.ApiRepository
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -10,7 +11,6 @@ import io.ktor.routing.Routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import routing.api
-import service.ApiService
 
 fun Application.module() {
     install(DefaultHeaders)
@@ -25,7 +25,7 @@ fun Application.module() {
     }
 
     install(Routing) {
-        api(ApiService())
+        api(ApiRepository())
     }
 }
 

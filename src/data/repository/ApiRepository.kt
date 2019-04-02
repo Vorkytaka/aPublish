@@ -1,4 +1,4 @@
-package service
+package data.repository
 
 import data.table.Posts
 import kotlinx.coroutines.Dispatchers
@@ -12,13 +12,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
-interface IApiService {
-    suspend fun getAllPosts(): List<Post>
-    suspend fun getPost(id: Long): Post?
-    suspend fun addPost(post: NewPost): Post
-}
-
-class ApiService : IApiService {
+class ApiRepository : IApiRepository {
     override suspend fun getAllPosts(): List<Post> = withContext(Dispatchers.IO) {
         transaction {
             Posts.selectAll().map { it.toPost() }

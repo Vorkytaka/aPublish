@@ -1,7 +1,5 @@
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
-import data.table.Posts
+import data.DatabaseHelper
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -11,9 +9,6 @@ import io.ktor.jackson.jackson
 import io.ktor.routing.Routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import routing.api
 import service.ApiService
 
@@ -21,10 +16,7 @@ fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)
 
-    Database.connect(createTestDb())
-    transaction {
-        SchemaUtils.create(Posts)
-    }
+    DatabaseHelper.init()
 
     install(ContentNegotiation) {
         jackson {
@@ -35,18 +27,6 @@ fun Application.module() {
     install(Routing) {
         api(ApiService())
     }
-}
-
-fun createTestDb(): HikariDataSource {
-    val config = HikariConfig().apply {
-        driverClassName = "org.h2.Driver"
-        jdbcUrl = "jdbc:h2:mem:test"
-        maximumPoolSize = 3
-        isAutoCommit = false
-        transactionIsolation = "TRANSACTION_REPEATABLE_READ"
-        validate()
-    }
-    return HikariDataSource(config)
 }
 
 fun main(args: Array<String>) {

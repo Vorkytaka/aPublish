@@ -1,11 +1,11 @@
 package service
 
+import data.table.Posts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import model.NewPost
 import model.Post
-import model.Posts
-import model.toPost
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -47,4 +47,11 @@ class ApiService : IApiService {
 
         getPost(id)!!
     }
+
+    fun ResultRow.toPost() = Post(
+        this[Posts.id],
+        this[Posts.author],
+        this[Posts.content],
+        this[Posts.createdDate]
+    )
 }

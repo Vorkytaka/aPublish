@@ -1,12 +1,7 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import data.DatabaseHelper
-import data.mapper.Mapper
-import data.repository.ApiRepository
-import data.repository.IApiRepository
-import data.response.PostResponse
-import data.service.ApiService
 import data.service.IApiService
-import data.table.Posts
+import di.appModule
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -16,8 +11,8 @@ import io.ktor.jackson.jackson
 import io.ktor.routing.Routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import model.Post
-import org.jetbrains.exposed.sql.ResultRow
+import org.koin.ktor.ext.Koin
+import org.koin.ktor.ext.inject
 import routing.api
 
 fun Application.module() {
@@ -32,28 +27,11 @@ fun Application.module() {
         }
     }
 
-    val mapper: Mapper<ResultRow, Post> = {
-        Post(
-            this[Posts.id],
-            this[Posts.author],
-            this[Posts.content],
-            this[Posts.createdDate]
-        )
+    install(Koin) {
+        modules(appModule)
     }
-    val repository: IApiRepository = ApiRepository(mapper)
 
-    val mapper1: Mapper<Post, PostResponse> = {
-        PostResponse(
-            this.id,
-            this.author,
-            this.content,
-            this.createdDate.millis
-        )
-    }
-    val service: IApiService = ApiService(
-        repository,
-        mapper1
-    )
+    val service: IApiService by inject()
 
     install(Routing) {
         api(service)

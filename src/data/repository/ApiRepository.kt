@@ -1,5 +1,6 @@
 package data.repository
 
+import data.mapper.Mapper
 import data.table.Posts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,10 +13,12 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
-class ApiRepository : IApiRepository {
+class ApiRepository(
+    private val mapper: Mapper<ResultRow, Post>
+) : IApiRepository {
     override suspend fun getAllPosts(): List<Post> = withContext(Dispatchers.IO) {
         transaction {
-            Posts.selectAll().map { it.toPost() }
+            Posts.selectAll().map(mapper)
         }
     }
 
@@ -24,7 +27,7 @@ class ApiRepository : IApiRepository {
 
         transaction {
             Posts.select { (Posts.id eq id) }
-                .map { it.toPost() }
+                .map(mapper)
                 .firstOrNull()
         }
     }
@@ -41,11 +44,4 @@ class ApiRepository : IApiRepository {
 
         getPost(id)!!
     }
-
-    fun ResultRow.toPost() = Post(
-        this[Posts.id],
-        this[Posts.author],
-        this[Posts.content],
-        this[Posts.createdDate]
-    )
 }

@@ -13,11 +13,16 @@ import model.NewPost
 
 fun Route.api(repository: IApiRepository) {
     route("api") {
-        get("/") {
-            call.respond(repository.getAllPosts())
+        get {
+            call.respond(repository.getPage(0))
         }
 
-        get("/{id}") {
+        get("/{page}") {
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            call.respond(repository.getPage(page))
+        }
+
+        get("/p/{id}") {
             val id = call.parameters["id"]?.toLong()!!
             val message = repository.getPost(id)
 

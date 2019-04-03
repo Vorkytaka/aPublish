@@ -16,9 +16,10 @@ import org.joda.time.DateTime
 class ApiRepository(
     private val mapper: Mapper<ResultRow, Post>
 ) : IApiRepository {
-    override suspend fun getAllPosts(): List<Post> = withContext(Dispatchers.IO) {
+
+    override suspend fun getPage(page: Int): List<Post> = withContext(Dispatchers.IO) {
         transaction {
-            Posts.selectAll().map(mapper)
+            Posts.selectAll().limit(10, 10 * page).map(mapper)
         }
     }
 

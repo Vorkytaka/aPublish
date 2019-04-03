@@ -1,6 +1,6 @@
 package routing
 
-import data.repository.IApiRepository
+import data.service.IApiService
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -11,20 +11,20 @@ import io.ktor.routing.post
 import io.ktor.routing.route
 import model.NewPost
 
-fun Route.api(repository: IApiRepository) {
+fun Route.api(service: IApiService) {
     route("api") {
         get {
-            call.respond(repository.getPage(0))
+            call.respond(service.getPage(0))
         }
 
         get("/{page}") {
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.respond(repository.getPage(page))
+            call.respond(service.getPage(page))
         }
 
         get("/p/{id}") {
             val id = call.parameters["id"]?.toLong()!!
-            val message = repository.getPost(id)
+            val message = service.getPost(id)
 
             if (message != null) {
                 call.respond(message)
@@ -35,7 +35,7 @@ fun Route.api(repository: IApiRepository) {
 
         post("/new") {
             val post = call.receive<NewPost>()
-            call.respond(HttpStatusCode.Created, repository.addPost(post))
+            call.respond(HttpStatusCode.Created, service.addPost(post))
         }
     }
 }

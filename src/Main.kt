@@ -3,6 +3,9 @@ import data.DatabaseHelper
 import data.mapper.Mapper
 import data.repository.ApiRepository
 import data.repository.IApiRepository
+import data.response.PostResponse
+import data.service.ApiService
+import data.service.IApiService
 import data.table.Posts
 import io.ktor.application.Application
 import io.ktor.application.install
@@ -39,8 +42,21 @@ fun Application.module() {
     }
     val repository: IApiRepository = ApiRepository(mapper)
 
+    val mapper1: Mapper<Post, PostResponse> = {
+        PostResponse(
+            this.id,
+            this.author,
+            this.content,
+            this.createdDate.millis
+        )
+    }
+    val service: IApiService = ApiService(
+        repository,
+        mapper1
+    )
+
     install(Routing) {
-        api(repository)
+        api(service)
     }
 }
 

@@ -1,25 +1,22 @@
 package data.repository
 
 import data.mapper.Mapper
+import data.table.PostEntity
 import data.table.Posts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import model.NewPost
 import model.Post
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
 class ApiRepository(
-    private val mapper: Mapper<ResultRow, Post>
+    private val mapper: Mapper<PostEntity, Post>
 ) : IApiRepository {
 
     override suspend fun getPage(page: Int): List<Post> = withContext(Dispatchers.IO) {
         transaction {
-            Posts.selectAll().limit(10, 10 * page).map(mapper)
+            PostEntity.all().limit(10, 10 * page).map(mapper)
         }
     }
 
@@ -27,7 +24,7 @@ class ApiRepository(
         if (id == -1L) return@withContext null
 
         transaction {
-            Posts.select { (Posts.id eq id) }
+            PostEntity.find { Posts.id eq id }
                 .map(mapper)
                 .firstOrNull()
         }
@@ -36,11 +33,11 @@ class ApiRepository(
     override suspend fun addPost(post: NewPost): Post = withContext(Dispatchers.IO) {
         var id: Long = -1L
         transaction {
-            id = (Posts.insert {
-                it[author] = post.author
-                it[content] = post.content
-                it[createdDate] = DateTime.now()
-            } get Posts.id)!!
+            id = (PostEntity.new {
+                author = post.author
+                content = post.content
+                createdDate = DateTime.now()
+            }).id.value
         }
 
         getPost(id)!!

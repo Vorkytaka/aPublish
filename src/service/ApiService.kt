@@ -16,7 +16,7 @@ class ApiService(
         val posts = repository.getPage(page)
         return PageResponse(
             page,
-            posts.take(10).map(mapper),
+            posts.take(POST_ON_PAGE_COUNT).map(mapper),
             posts.size > POST_ON_PAGE_COUNT
         )
     }
@@ -30,8 +30,8 @@ class ApiService(
         return mapper(repository.addPost(post))
     }
 
-    override suspend fun findPostByTheme(theme: String, page: Int): PageResponse {
-        val posts = repository.findPostByTheme(theme, page)
+    override suspend fun findPostsByTheme(theme: String, page: Int): PageResponse {
+        val posts = repository.findPostsByTheme(theme, page)
         return PageResponse(
             page,
             posts.take(POST_ON_PAGE_COUNT).map(mapper),

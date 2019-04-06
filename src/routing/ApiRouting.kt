@@ -40,13 +40,13 @@ fun Route.api(service: IApiService) {
 
         get("/t/{theme}") {
             val theme: String = call.parameters["theme"] ?: return@get // todo: http response
-            call.respond(service.findPostByTheme(theme, 0))
+            call.respond(service.findPostsByTheme(theme, 0))
         }
 
         get("/t/{theme}/{page}") {
             val theme: String = call.parameters["theme"] ?: return@get // todo: http response
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.respond(service.findPostByTheme(theme, page))
+            call.respond(service.findPostsByTheme(theme, page))
         }
 
         get("/a/{author}") {

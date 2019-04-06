@@ -46,7 +46,7 @@ class ApiRepository(
         getPost(id)!!
     }
 
-    override suspend fun findPostByTheme(theme: String, page: Int): List<Post> = withContext(Dispatchers.IO) {
+    override suspend fun findPostsByTheme(theme: String, page: Int): List<Post> = withContext(Dispatchers.IO) {
         transaction {
             PostEntity.find { Posts.theme eq theme }
                 .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)

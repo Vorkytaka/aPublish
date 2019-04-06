@@ -7,5 +7,6 @@ data class Post(
     val author: String?,
     val title: String,
     val content: String,
-    val createdDate: DateTime
+    val createdDate: DateTime,
+    val theme: String?
 )

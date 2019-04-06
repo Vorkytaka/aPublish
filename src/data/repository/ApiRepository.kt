@@ -39,6 +39,7 @@ class ApiRepository(
                 title = post.title
                 content = post.content
                 createdDate = DateTime.now()
+                theme = post.theme
             }).id.value
         }
 

@@ -10,5 +10,8 @@ data class CreatePostRequest(
     val title: String,
 
     @JsonProperty("content")
-    val content: String
+    val content: String,
+
+    @JsonProperty("theme")
+    val theme: String?
 )

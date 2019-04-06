@@ -1,6 +1,5 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import data.DatabaseHelper
-import data.service.IApiService
 import di.appModule
 import io.ktor.application.Application
 import io.ktor.application.install
@@ -14,6 +13,7 @@ import io.ktor.server.netty.Netty
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import routing.api
+import service.IApiService
 
 fun Application.module() {
     install(DefaultHeaders)

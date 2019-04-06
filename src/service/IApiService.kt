@@ -1,4 +1,4 @@
-package data.service
+package service
 
 import data.response.PostResponse
 import model.NewPost

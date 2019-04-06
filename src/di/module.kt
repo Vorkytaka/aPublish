@@ -6,12 +6,12 @@ import data.mapper.responseMapper
 import data.repository.ApiRepository
 import data.repository.IApiRepository
 import data.response.PostResponse
-import data.service.ApiService
-import data.service.IApiService
 import data.table.PostEntity
 import model.Post
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import service.ApiService
+import service.IApiService
 
 val appModule = module {
     single<Mapper<PostEntity, Post>>(named("dbMapper")) { dbMapper }

@@ -1,4 +1,4 @@
-package data.service
+package service
 
 import data.mapper.Mapper
 import data.repository.IApiRepository

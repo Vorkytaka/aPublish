@@ -1,7 +1,9 @@
 package service
 
+import POST_ON_PAGE_COUNT
 import data.mapper.Mapper
 import data.repository.IApiRepository
+import data.response.PageResponse
 import data.response.PostResponse
 import model.NewPost
 import model.Post
@@ -10,8 +12,13 @@ class ApiService(
     private val repository: IApiRepository,
     private val mapper: Mapper<Post, PostResponse>
 ) : IApiService {
-    override suspend fun getPage(page: Int): List<PostResponse> {
-        return repository.getPage(page).map(mapper)
+    override suspend fun getPage(page: Int): PageResponse {
+        val posts = repository.getPage(page)
+        return PageResponse(
+            page,
+            posts.take(10).map(mapper),
+            posts.size > POST_ON_PAGE_COUNT
+        )
     }
 
     override suspend fun getPost(id: Long): PostResponse? {

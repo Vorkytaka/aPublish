@@ -15,6 +15,8 @@ import org.koin.ktor.ext.inject
 import routing.api
 import service.IApiService
 
+const val POST_ON_PAGE_COUNT = 10
+
 fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)

@@ -1,5 +1,6 @@
 package data.repository
 
+import POST_ON_PAGE_COUNT
 import data.mapper.Mapper
 import data.table.PostEntity
 import data.table.Posts
@@ -16,7 +17,7 @@ class ApiRepository(
 
     override suspend fun getPage(page: Int): List<Post> = withContext(Dispatchers.IO) {
         transaction {
-            PostEntity.all().limit(10, 10 * page).map(mapper)
+            PostEntity.all().limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page).map(mapper)
         }
     }
 

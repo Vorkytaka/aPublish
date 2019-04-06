@@ -17,6 +17,17 @@ val dbMapper: Mapper<PostEntity, Post> = {
     )
 }
 
+val dbCompactMapper: Mapper<PostEntity, Post> = {
+    Post(
+        this.id.value,
+        this.author,
+        this.title,
+        this.content.take(100),
+        this.createdDate,
+        this.theme
+    )
+}
+
 val responseMapper: Mapper<Post, PostResponse> = {
     PostResponse(
         this.id,

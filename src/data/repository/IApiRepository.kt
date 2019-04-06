@@ -8,4 +8,5 @@ interface IApiRepository {
     suspend fun getPost(id: Long): Post?
     suspend fun addPost(post: CreatePostRequest): Post
     suspend fun findPostByTheme(theme: String, page: Int): List<Post>
+    suspend fun findPostsByAuthor(author: String, page: Int): List<Post>
 }

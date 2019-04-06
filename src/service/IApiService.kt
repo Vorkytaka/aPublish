@@ -9,4 +9,5 @@ interface IApiService {
     suspend fun getPost(id: Long): PostResponse?
     suspend fun addPost(post: CreatePostRequest): PostResponse
     suspend fun findPostByTheme(theme: String, page: Int): PageResponse
+    suspend fun findPostsByAuthor(author: String, page: Int): PageResponse
 }

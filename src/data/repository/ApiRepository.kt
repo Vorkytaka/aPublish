@@ -53,4 +53,12 @@ class ApiRepository(
                 .map(mapper)
         }
     }
+
+    override suspend fun findPostsByAuthor(author: String, page: Int): List<Post> = withContext(Dispatchers.IO) {
+        transaction {
+            PostEntity.find { Posts.author eq author }
+                .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
+                .map(mapper)
+        }
+    }
 }

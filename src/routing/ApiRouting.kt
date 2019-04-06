@@ -48,5 +48,16 @@ fun Route.api(service: IApiService) {
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
             call.respond(service.findPostByTheme(theme, page))
         }
+
+        get("/a/{author}") {
+            val author: String = call.parameters["author"] ?: return@get // todo: http response
+            call.respond(service.findPostsByAuthor(author, 0))
+        }
+
+        get("/a/{author}/{page}") {
+            val author: String = call.parameters["author"] ?: return@get // todo: http response
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            call.respond(service.findPostsByAuthor(author, page))
+        }
     }
 }

@@ -38,4 +38,13 @@ class ApiService(
             posts.size > POST_ON_PAGE_COUNT
         )
     }
+
+    override suspend fun findPostsByAuthor(author: String, page: Int): PageResponse {
+        val posts = repository.findPostsByAuthor(author, page)
+        return PageResponse(
+            page,
+            posts.take(POST_ON_PAGE_COUNT).map(mapper),
+            posts.size > POST_ON_PAGE_COUNT
+        )
+    }
 }

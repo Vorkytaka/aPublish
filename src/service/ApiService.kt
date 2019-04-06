@@ -29,4 +29,13 @@ class ApiService(
     override suspend fun addPost(post: CreatePostRequest): PostResponse {
         return mapper(repository.addPost(post))
     }
+
+    override suspend fun findPostByTheme(theme: String, page: Int): PageResponse {
+        val posts = repository.findPostByTheme(theme, page)
+        return PageResponse(
+            page,
+            posts.take(POST_ON_PAGE_COUNT).map(mapper),
+            posts.size > POST_ON_PAGE_COUNT
+        )
+    }
 }

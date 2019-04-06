@@ -37,5 +37,16 @@ fun Route.api(service: IApiService) {
             val post = call.receive<CreatePostRequest>()
             call.respond(HttpStatusCode.Created, service.addPost(post))
         }
+
+        get("/t/{theme}") {
+            val theme: String = call.parameters["theme"] ?: return@get // todo: http response
+            call.respond(service.findPostByTheme(theme, 0))
+        }
+
+        get("/t/{theme}/{page}") {
+            val theme: String = call.parameters["theme"] ?: return@get // todo: http response
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            call.respond(service.findPostByTheme(theme, page))
+        }
     }
 }

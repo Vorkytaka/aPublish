@@ -1,5 +1,6 @@
 package routing
 
+import data.request.CreatePostRequest
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -8,7 +9,6 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
-import model.NewPost
 import service.IApiService
 
 fun Route.api(service: IApiService) {
@@ -34,7 +34,7 @@ fun Route.api(service: IApiService) {
         }
 
         post("/new") {
-            val post = call.receive<NewPost>()
+            val post = call.receive<CreatePostRequest>()
             call.respond(HttpStatusCode.Created, service.addPost(post))
         }
     }

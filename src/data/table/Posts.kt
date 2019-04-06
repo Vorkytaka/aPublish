@@ -7,6 +7,7 @@ import org.jetbrains.exposed.dao.LongIdTable
 
 object Posts : LongIdTable() {
     val author = varchar("author", 100).nullable()
+    val title = varchar("title", 50)
     val content = varchar("content", 5000)
     val createdDate = datetime("createdDate")
 }
@@ -17,6 +18,7 @@ class PostEntity(
     companion object : LongEntityClass<PostEntity>(Posts)
 
     var author by Posts.author
+    var title by Posts.title
     var content by Posts.content
     var createdDate by Posts.createdDate
 }

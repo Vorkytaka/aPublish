@@ -10,6 +10,7 @@ val dbMapper: Mapper<PostEntity, Post> = {
     Post(
         this.id.value,
         this.author,
+        this.title,
         this.content,
         this.createdDate
     )
@@ -19,6 +20,7 @@ val responseMapper: Mapper<Post, PostResponse> = {
     PostResponse(
         this.id,
         this.author,
+        this.title,
         this.content,
         this.createdDate.millis
     )

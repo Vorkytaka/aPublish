@@ -3,9 +3,9 @@ package service
 import POST_ON_PAGE_COUNT
 import data.mapper.Mapper
 import data.repository.IApiRepository
+import data.request.CreatePostRequest
 import data.response.PageResponse
 import data.response.PostResponse
-import model.NewPost
 import model.Post
 
 class ApiService(
@@ -26,7 +26,7 @@ class ApiService(
         return if (post == null) null else mapper(post)
     }
 
-    override suspend fun addPost(post: NewPost): PostResponse {
+    override suspend fun addPost(post: CreatePostRequest): PostResponse {
         return mapper(repository.addPost(post))
     }
 }

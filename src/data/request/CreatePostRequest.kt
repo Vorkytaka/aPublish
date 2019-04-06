@@ -1,11 +1,8 @@
-package data.response
+package data.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class PostResponse(
-    @JsonProperty("id")
-    val id: Long,
-
+data class CreatePostRequest(
     @JsonProperty("author")
     val author: String?,
 
@@ -13,8 +10,5 @@ data class PostResponse(
     val title: String,
 
     @JsonProperty("content")
-    val content: String,
-
-    @JsonProperty("createdDate")
-    val createdDate: Long
+    val content: String
 )

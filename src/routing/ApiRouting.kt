@@ -1,6 +1,7 @@
 package routing
 
 import data.request.CreatePostRequest
+import exception.ArgumentException
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -21,14 +22,16 @@ fun Route.api(service: IApiService) {
         }
 
         get("/{page}") {
-            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            val page: Int = call.parameters["page"]?.toIntOrNull()
+                ?: throw ArgumentException("page")
             call.respond(service.getPage(page))
         }
 
         get("/p/{id}") {
-            val id = call.parameters["id"]?.toLong()!!
-            val message = service.getPost(id)
+            val id = call.parameters["id"]?.toLongOrNull()
+                ?: throw ArgumentException("id")
 
+            val message = service.getPost(id)
             if (message != null) {
                 call.respond(message)
             } else {
@@ -46,8 +49,10 @@ fun Route.api(service: IApiService) {
         }
 
         get("/t/{theme}/{page}") {
-            val theme: String = call.parameters["theme"] ?: return@get // todo: http response
-            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            val theme: String = call.parameters["theme"]
+                ?: throw ArgumentException("theme")
+            val page: Int = call.parameters["page"]?.toIntOrNull()
+                ?: throw ArgumentException("page")
             call.respond(service.findPostsByTheme(theme, page))
         }
 
@@ -56,8 +61,10 @@ fun Route.api(service: IApiService) {
         }
 
         get("/a/{author}/{page}") {
-            val author: String = call.parameters["author"] ?: return@get // todo: http response
-            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            val author: String = call.parameters["author"]
+                ?: throw ArgumentException("authro")
+            val page: Int = call.parameters["page"]?.toIntOrNull()
+                ?: throw ArgumentException("page")
             call.respond(service.findPostsByAuthor(author, page))
         }
     }

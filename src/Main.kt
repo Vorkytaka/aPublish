@@ -1,12 +1,17 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import data.DatabaseHelper
 import di.appModule
+import exception.ArgumentException
 import io.ktor.application.Application
+import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
+import io.ktor.features.StatusPages
+import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
+import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -31,6 +36,12 @@ fun Application.module() {
 
     install(Koin) {
         modules(appModule)
+    }
+
+    install(StatusPages) {
+        exception<ArgumentException> {
+            call.respond(HttpStatusCode.BadRequest)
+        }
     }
 
     val service: IApiService by inject()

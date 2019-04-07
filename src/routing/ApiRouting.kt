@@ -1,10 +1,13 @@
 package routing
 
 import data.request.CreatePostRequest
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
+import io.ktor.request.path
 import io.ktor.request.receive
 import io.ktor.response.respond
+import io.ktor.response.respondRedirect
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
@@ -14,7 +17,7 @@ import service.IApiService
 fun Route.api(service: IApiService) {
     route("api") {
         get {
-            call.respond(service.getPage(0))
+            call.redirectToFirst()
         }
 
         get("/{page}") {
@@ -39,8 +42,7 @@ fun Route.api(service: IApiService) {
         }
 
         get("/t/{theme}") {
-            val theme: String = call.parameters["theme"] ?: return@get // todo: http response
-            call.respond(service.findPostsByTheme(theme, 0))
+            call.redirectToFirst()
         }
 
         get("/t/{theme}/{page}") {
@@ -50,8 +52,7 @@ fun Route.api(service: IApiService) {
         }
 
         get("/a/{author}") {
-            val author: String = call.parameters["author"] ?: return@get // todo: http response
-            call.respond(service.findPostsByAuthor(author, 0))
+            call.redirectToFirst()
         }
 
         get("/a/{author}/{page}") {
@@ -60,4 +61,17 @@ fun Route.api(service: IApiService) {
             call.respond(service.findPostsByAuthor(author, page))
         }
     }
+}
+
+private suspend inline fun ApplicationCall.redirectToFirst() {
+    val path = this.request.path()
+    val s = '/' == path.last()
+
+    val newPath = StringBuilder().apply {
+        append(path)
+        if (!s) append('/')
+        append('0')
+    }.toString()
+
+    this.respondRedirect(newPath)
 }

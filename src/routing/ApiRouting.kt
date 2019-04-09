@@ -1,7 +1,9 @@
 package routing
 
 import data.request.CreatePostRequest
+import data.response.PageResponse
 import exception.ArgumentException
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -17,7 +19,7 @@ fun Route.api(service: IApiService) {
 
         get("/{page?}") {
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.respond(service.getPage(page))
+            call.pageRespond(service.getPage(page))
         }
 
         get("/p/{id}") {
@@ -41,14 +43,22 @@ fun Route.api(service: IApiService) {
             val theme: String = call.parameters["theme"]
                 ?: throw ArgumentException("theme")
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.respond(service.findPostsByTheme(theme, page))
+            call.pageRespond(service.findPostsByTheme(theme, page))
         }
 
         get("/a/{author}/{page?}") {
             val author: String = call.parameters["author"]
                 ?: throw ArgumentException("author")
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.respond(service.findPostsByAuthor(author, page))
+            call.pageRespond(service.findPostsByAuthor(author, page))
         }
+    }
+}
+
+private suspend inline fun ApplicationCall.pageRespond(page: PageResponse) {
+    if (page.posts.isEmpty()) {
+        this.respond(HttpStatusCode.NotFound)
+    } else {
+        this.respond(page)
     }
 }

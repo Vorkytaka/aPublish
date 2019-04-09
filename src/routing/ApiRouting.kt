@@ -2,13 +2,10 @@ package routing
 
 import data.request.CreatePostRequest
 import exception.ArgumentException
-import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.path
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.response.respondRedirect
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
@@ -54,17 +51,4 @@ fun Route.api(service: IApiService) {
             call.respond(service.findPostsByAuthor(author, page))
         }
     }
-}
-
-private suspend inline fun ApplicationCall.redirectToFirst() {
-    val path = this.request.path()
-    val s = '/' == path.last()
-
-    val newPath = StringBuilder().apply {
-        append(path)
-        if (!s) append('/')
-        append('0')
-    }.toString()
-
-    this.respondRedirect(newPath)
 }

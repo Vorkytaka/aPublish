@@ -17,13 +17,9 @@ import service.IApiService
 
 fun Route.api(service: IApiService) {
     route("api") {
-        get {
-            call.redirectToFirst()
-        }
 
-        get("/{page}") {
-            val page: Int = call.parameters["page"]?.toIntOrNull()
-                ?: throw ArgumentException("page")
+        get("/{page?}") {
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
             call.respond(service.getPage(page))
         }
 
@@ -44,27 +40,17 @@ fun Route.api(service: IApiService) {
             call.respond(HttpStatusCode.Created, service.addPost(post))
         }
 
-        get("/t/{theme}") {
-            call.redirectToFirst()
-        }
-
-        get("/t/{theme}/{page}") {
+        get("/t/{theme}/{page?}") {
             val theme: String = call.parameters["theme"]
                 ?: throw ArgumentException("theme")
-            val page: Int = call.parameters["page"]?.toIntOrNull()
-                ?: throw ArgumentException("page")
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
             call.respond(service.findPostsByTheme(theme, page))
         }
 
-        get("/a/{author}") {
-            call.redirectToFirst()
-        }
-
-        get("/a/{author}/{page}") {
+        get("/a/{author}/{page?}") {
             val author: String = call.parameters["author"]
-                ?: throw ArgumentException("authro")
-            val page: Int = call.parameters["page"]?.toIntOrNull()
-                ?: throw ArgumentException("page")
+                ?: throw ArgumentException("author")
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
             call.respond(service.findPostsByAuthor(author, page))
         }
     }

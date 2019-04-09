@@ -26,9 +26,9 @@ fun Route.api(service: IApiService) {
             val id = call.parameters["id"]?.toLongOrNull()
                 ?: throw ArgumentException("id")
 
-            val message = service.getPost(id)
-            if (message != null) {
-                call.respond(message)
+            val post = service.getPost(id)
+            if (post != null) {
+                call.respond(post)
             } else {
                 call.respond(HttpStatusCode.NotFound)
             }

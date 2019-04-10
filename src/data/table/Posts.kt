@@ -6,11 +6,11 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.LongIdTable
 
 object Posts : LongIdTable() {
-    val author = varchar("author", 100).nullable()
-    val title = varchar("title", 50)
+    val author = varchar("author", 64).nullable()
+    val title = varchar("title", 64)
     val content = text("content")
     val createdDate = datetime("createdDate")
-    val theme = varchar("theme", 32).nullable()
+    val theme = varchar("theme", 64).nullable()
 }
 
 class PostEntity(

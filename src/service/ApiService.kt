@@ -21,8 +21,8 @@ class ApiService(
         )
     }
 
-    override suspend fun getPost(id: Long): PostResponse? {
-        val post = repository.getPost(id)
+    override suspend fun findPostById(id: Long): PostResponse? {
+        val post = repository.findPostById(id)
         return if (post == null) null else mapper(post)
     }
 

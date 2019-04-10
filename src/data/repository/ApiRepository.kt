@@ -22,7 +22,7 @@ class ApiRepository(
         }
     }
 
-    override suspend fun getPost(id: Long): Post? = withContext(Dispatchers.IO) {
+    override suspend fun findPostById(id: Long): Post? = withContext(Dispatchers.IO) {
         if (id == -1L) return@withContext null
 
         transaction {
@@ -44,7 +44,7 @@ class ApiRepository(
             }).id.value
         }
 
-        getPost(id)!!
+        findPostById(id)!!
     }
 
     override suspend fun findPostsByTheme(theme: String, page: Int): List<Post> = withContext(Dispatchers.IO) {

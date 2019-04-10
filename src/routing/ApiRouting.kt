@@ -23,7 +23,7 @@ fun Route.api(service: IApiService) {
             val id = call.parameters["id"]?.toLongOrNull()
                 ?: throw ArgumentException("id")
 
-            val post = service.getPost(id)
+            val post = service.findPostById(id)
             if (post != null) {
                 val cacheControl = CacheControl.MaxAge(31536000, visibility = CacheControl.Visibility.Public)
                 call.response.cacheControl(cacheControl)
@@ -37,7 +37,7 @@ fun Route.api(service: IApiService) {
             val id = call.parameters["id"]?.toLongOrNull()
                 ?: throw ArgumentException("id")
 
-            val post = service.getPost(id)
+            val post = service.findPostById(id)
             if (post != null) {
                 val cacheControl = CacheControl.MaxAge(31536000, visibility = CacheControl.Visibility.Public)
                 call.response.cacheControl(cacheControl)

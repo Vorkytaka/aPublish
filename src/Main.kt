@@ -13,6 +13,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
 import io.ktor.routing.Routing
+import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.koin.ktor.ext.Koin
@@ -53,9 +54,7 @@ fun Application.module() {
 
 fun main(args: Array<String>) {
     embeddedServer(
-        factory = Netty,
-        port = 8080,
-        watchPaths = listOf("MainKt"),
-        module = Application::module
+        Netty,
+        commandLineEnvironment(args)
     ).start()
 }

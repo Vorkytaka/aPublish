@@ -16,6 +16,7 @@ import io.ktor.routing.Routing
 import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.util.KtorExperimentalAPI
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import routing.api
@@ -23,11 +24,12 @@ import service.IApiService
 
 const val POST_ON_PAGE_COUNT = 10
 
+@KtorExperimentalAPI
 fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)
 
-    DatabaseHelper.init()
+    DatabaseHelper.init(this.environment.config)
 
     install(ContentNegotiation) {
         jackson {

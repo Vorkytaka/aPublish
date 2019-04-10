@@ -36,9 +36,11 @@ fun Route.api(service: IApiService) {
             }
         }
 
-        post("/new") {
+        post("/post") {
             val post = call.receive<CreatePostRequest>()
-            call.respond(HttpStatusCode.Created, service.addPost(post))
+            val message = service.addPost(post)
+            call.response.headers.append("Location", "/post/${message.id}")
+            call.respond(HttpStatusCode.Created)
         }
 
         get("/t/{theme}/{page?}") {

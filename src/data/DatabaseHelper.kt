@@ -3,7 +3,6 @@ package data
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import data.table.Posts
-import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -12,27 +11,27 @@ import javax.sql.DataSource
 
 @KtorExperimentalAPI
 object DatabaseHelper {
-    fun init(serverConfig: ApplicationConfig) {
-        Database.connect(createDataSource(serverConfig))
+    fun init(config: DatabaseConfig) {
+        Database.connect(createDataSource(config))
         transaction {
             SchemaUtils.create(Posts)
         }
     }
 
-    private fun createDataSource(serverConfig: ApplicationConfig): DataSource {
-        val config = HikariConfig().apply {
+    private fun createDataSource(config: DatabaseConfig): DataSource {
+        val hikariConfig = HikariConfig().apply {
 
-            driverClassName = serverConfig.property("db.config.driverClassName").getString()
-            jdbcUrl = serverConfig.property("db.config.jdbcUrl").getString()
-            maximumPoolSize = serverConfig.property("db.config.maximumPoolSize").getString().toInt()
-            isAutoCommit = serverConfig.property("db.config.isAutoCommit").getString().toBoolean()
-            transactionIsolation = serverConfig.property("db.config.transactionIsolation").getString()
+            driverClassName = config.driverClassName
+            jdbcUrl = config.jdbcUrl
+            maximumPoolSize = config.maximumPoolSize
+            isAutoCommit = config.isAutoCommit
+            transactionIsolation = config.transactionIsolation
 
-            username = serverConfig.propertyOrNull("db.credentials.username")?.getString()
-            password = serverConfig.propertyOrNull("db.credentials.password")?.getString()
+            username = config.username
+            password = config.password
 
             validate()
         }
-        return HikariDataSource(config)
+        return HikariDataSource(hikariConfig)
     }
 }

@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.SerializationFeature
+import data.DatabaseConfig
 import data.DatabaseHelper
 import di.appModule
 import exception.ArgumentException
@@ -29,7 +30,8 @@ fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)
 
-    DatabaseHelper.init(this.environment.config)
+    val databaseConfig = DatabaseConfig.fromServerConfig(this.environment.config)
+    DatabaseHelper.init(databaseConfig)
 
     install(ContentNegotiation) {
         jackson {

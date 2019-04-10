@@ -54,14 +54,14 @@ fun Route.api(service: IApiService) {
             call.respond(HttpStatusCode.Created)
         }
 
-        get("/t/{theme}/{page?}") {
+        get("/theme/{theme}/{page?}") {
             val theme: String = call.parameters["theme"]
                 ?: throw ArgumentException("theme")
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
             call.respond(service.findPostsByTheme(theme, page))
         }
 
-        get("/a/{author}/{page?}") {
+        get("/author/{author}/{page?}") {
             val author: String = call.parameters["author"]
                 ?: throw ArgumentException("author")
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0

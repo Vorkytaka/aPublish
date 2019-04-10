@@ -8,10 +8,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.cacheControl
 import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.route
+import io.ktor.routing.*
 import service.IApiService
 
 fun Route.api(service: IApiService) {
@@ -31,6 +28,20 @@ fun Route.api(service: IApiService) {
                 val cacheControl = CacheControl.MaxAge(31536000, visibility = CacheControl.Visibility.Public)
                 call.response.cacheControl(cacheControl)
                 call.respond(post)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
+
+        head("/post/{id}") {
+            val id = call.parameters["id"]?.toLongOrNull()
+                ?: throw ArgumentException("id")
+
+            val post = service.getPost(id)
+            if (post != null) {
+                val cacheControl = CacheControl.MaxAge(31536000, visibility = CacheControl.Visibility.Public)
+                call.response.cacheControl(cacheControl)
+                call.respond(HttpStatusCode.OK)
             } else {
                 call.respond(HttpStatusCode.NotFound)
             }

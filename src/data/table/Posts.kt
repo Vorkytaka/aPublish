@@ -8,7 +8,7 @@ import org.jetbrains.exposed.dao.LongIdTable
 object Posts : LongIdTable() {
     val author = varchar("author", 100).nullable()
     val title = varchar("title", 50)
-    val content = varchar("content", 5000)
+    val content = text("content")
     val createdDate = datetime("createdDate")
     val theme = varchar("theme", 32).nullable()
 }

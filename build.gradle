@@ -21,8 +21,8 @@ compileTestKotlin {
 }
 
 group 'apublish'
-version '0.0.1'
-mainClassName = "io.ktor.server.netty.EngineMain"
+version '0.0.1-prealpha'
+mainClassName = "MainKt"
 
 sourceSets {
     main.kotlin.srcDirs = main.java.srcDirs = ['src']

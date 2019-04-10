@@ -1,12 +1,12 @@
 package routing
 
 import data.request.CreatePostRequest
-import data.response.PageResponse
 import exception.ArgumentException
-import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.http.CacheControl
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
+import io.ktor.response.cacheControl
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
@@ -19,15 +19,17 @@ fun Route.api(service: IApiService) {
 
         get("/{page?}") {
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.pageRespond(service.getPage(page))
+            call.respond(service.getPage(page))
         }
 
-        get("/p/{id}") {
+        get("/post/{id}") {
             val id = call.parameters["id"]?.toLongOrNull()
                 ?: throw ArgumentException("id")
 
             val post = service.getPost(id)
             if (post != null) {
+                val cacheControl = CacheControl.MaxAge(31536000, visibility = CacheControl.Visibility.Public)
+                call.response.cacheControl(cacheControl)
                 call.respond(post)
             } else {
                 call.respond(HttpStatusCode.NotFound)
@@ -43,22 +45,14 @@ fun Route.api(service: IApiService) {
             val theme: String = call.parameters["theme"]
                 ?: throw ArgumentException("theme")
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.pageRespond(service.findPostsByTheme(theme, page))
+            call.respond(service.findPostsByTheme(theme, page))
         }
 
         get("/a/{author}/{page?}") {
             val author: String = call.parameters["author"]
                 ?: throw ArgumentException("author")
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.pageRespond(service.findPostsByAuthor(author, page))
+            call.respond(service.findPostsByAuthor(author, page))
         }
-    }
-}
-
-private suspend inline fun ApplicationCall.pageRespond(page: PageResponse) {
-    if (page.posts.isEmpty()) {
-        this.respond(HttpStatusCode.NotFound)
-    } else {
-        this.respond(page)
     }
 }

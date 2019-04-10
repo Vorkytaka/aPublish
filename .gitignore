@@ -26,7 +26,3 @@ bin/
 .project
 .classpath
 .konan
-
-gradle/
-gradlew
-gradlew.bat

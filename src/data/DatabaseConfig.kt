@@ -56,14 +56,14 @@ class DatabaseConfig private constructor(
         @JvmStatic
         fun fromEnvironment(args: Map<String, String>): DatabaseConfig {
             return create {
-                driverClassName = args["db.config.driverClassName"]!!
-                jdbcUrl = args["db.config.jdbcUrl"]!!
-                maximumPoolSize = args["db.config.maximumPoolSize"]!!.toInt()
-                isAutoCommit = args["db.config.isAutoCommit"]!!.toBoolean()
-                transactionIsolation = args["db.config.transactionIsolation"]!!
+                driverClassName = args["DB_DRIVER_CLASS_NAME"]!!
+                jdbcUrl = args["DB_JDBC_URL"]!!
+                maximumPoolSize = args["DB_MAXIMUM_POOL_SIZE"]!!.toInt()
+                isAutoCommit = args["DB_IS_AUTO_COMMIT"]!!.toBoolean()
+                transactionIsolation = args["DB_TRANSACTION_ISOLATION"]!!
 
-                username = args["db.credentials.username"]
-                password = args["db.credentials.password"]
+                username = args["DB_USERNAME"]
+                password = args["DB_PASSWORD"]
             }
         }
     }

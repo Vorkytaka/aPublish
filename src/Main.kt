@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.SerializationFeature
 import data.DatabaseConfig
 import data.DatabaseHelper
@@ -40,6 +41,7 @@ fun Application.module() {
     install(ContentNegotiation) {
         jackson {
             configure(SerializationFeature.INDENT_OUTPUT, true)
+            configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true)
         }
     }
 

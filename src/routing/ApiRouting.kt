@@ -60,5 +60,12 @@ fun Route.api(service: IApiService) {
             val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
             call.respond(service.findPostsByAuthor(author, page))
         }
+
+        get("/tag/{tag}/{page?}") {
+            val tag: String = call.parameters["tag"]
+                ?: throw ArgumentException("tag")
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            call.respond(service.findPostsByTag(tag, page))
+        }
     }
 }

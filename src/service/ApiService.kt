@@ -38,4 +38,13 @@ class ApiService(
             posts.size > POST_ON_PAGE_COUNT
         )
     }
+
+    override suspend fun findPostsByTag(tag: String, page: Int): PageResponse {
+        val posts = repository.findPostsByTag(tag, page)
+        return PageResponse(
+            page,
+            posts.take(POST_ON_PAGE_COUNT).map(mapper),
+            posts.size > POST_ON_PAGE_COUNT
+        )
+    }
 }

@@ -3,14 +3,12 @@ package data.repository
 import POST_ON_PAGE_COUNT
 import data.mapper.Mapper
 import data.request.CreatePostRequest
-import data.table.PostEntity
-import data.table.Posts
-import data.table.TagEntity
-import data.table.Tags
+import data.table.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import model.Post
 import org.jetbrains.exposed.sql.SizedCollection
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
@@ -64,6 +62,18 @@ class ApiRepository(
         transaction {
             PostEntity.find { Posts.author eq author }
                 .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
+                .map(mapper)
+        }
+    }
+
+    override suspend fun findPostsByTag(tag: String, page: Int): List<Post> = withContext(Dispatchers.IO) {
+        transaction {
+            PostTags
+                .innerJoin(Posts)
+                .innerJoin(Tags)
+                .select { Tags.name eq tag }
+                .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
+                .map { PostEntity.wrapRow(it) }
                 .map(mapper)
         }
     }

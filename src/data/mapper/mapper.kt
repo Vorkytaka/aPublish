@@ -6,7 +6,7 @@ import model.Post
 
 typealias Mapper<From, To> = From.() -> To
 
-val dbMapper: Mapper<PostEntity, Post> = {
+fun PostEntity.mapToPost() =
     Post(
         this.id.value,
         this.author,
@@ -16,21 +16,8 @@ val dbMapper: Mapper<PostEntity, Post> = {
         this.theme,
         this.language
     )
-}
 
-val dbCompactMapper: Mapper<PostEntity, Post> = {
-    Post(
-        this.id.value,
-        this.author,
-        this.title,
-        this.content.take(100),
-        this.createdDate,
-        this.theme,
-        this.language
-    )
-}
-
-val responseMapper: Mapper<Post, PostResponse> = {
+fun Post.mapToPostResponse() =
     PostResponse(
         this.id,
         this.author,
@@ -40,4 +27,3 @@ val responseMapper: Mapper<Post, PostResponse> = {
         this.theme,
         this.language
     )
-}

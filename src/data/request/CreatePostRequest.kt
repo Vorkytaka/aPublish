@@ -2,7 +2,7 @@ package data.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class CreatePostRequest(
+class CreatePostRequest(
     @JsonProperty("author")
     val author: String?,
 
@@ -12,6 +12,6 @@ data class CreatePostRequest(
     @JsonProperty("content")
     val content: String,
 
-    @JsonProperty("theme")
-    val theme: String?
+    @JsonProperty("tags")
+    val tags: Array<String>?
 )

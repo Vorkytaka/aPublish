@@ -5,9 +5,12 @@ import data.mapper.Mapper
 import data.request.CreatePostRequest
 import data.table.PostEntity
 import data.table.Posts
+import data.table.TagEntity
+import data.table.Tags
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import model.Post
+import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
@@ -32,17 +35,29 @@ class ApiRepository(
     }
 
     override suspend fun addPost(post: CreatePostRequest): Post = withContext(Dispatchers.IO) {
-        var id: Long = -1L
-        transaction {
-            id = (PostEntity.new {
+        val createdPost = transaction {
+            PostEntity.new {
                 author = post.author
                 title = post.title
                 content = post.content
                 createdDate = DateTime.now()
-            }).id.value
+            }
         }
 
-        findPostById(id)!!
+        if (post.tags != null) {
+            val tags = transaction {
+                post.tags
+                    .map {
+                        TagEntity.find { Tags.name eq it }.firstOrNull() ?: TagEntity.new { name = it }
+                    }
+            }
+
+            transaction {
+                createdPost.tags = SizedCollection(tags)
+            }
+        }
+
+        findPostById(createdPost.id.value)!!
     }
 
     override suspend fun findPostsByAuthor(author: String, page: Int): List<Post> = withContext(Dispatchers.IO) {

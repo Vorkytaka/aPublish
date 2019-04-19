@@ -69,15 +69,18 @@ Parameters:
 * `title` (required, string, max length 64 chars) - title of this post
 * `content` (required, string) - content of this post
 * `author` (optional, string, max length 64 chars) - author of this post
-* `theme` (optional, string, max length 64 chars) - theme of this post
+* `tags` (optional, array of strings) - tags for this post
 
 Example request:
 ```json
 {
   "title": "How we do some cool stuff",
   "author": "Some cool guy",
-  "theme": "Work",
-  "content": "We just do it!"
+  "content": "We just do it!",
+  "tags": [
+    "life",
+    "death"
+  ]
 }
 ```
 

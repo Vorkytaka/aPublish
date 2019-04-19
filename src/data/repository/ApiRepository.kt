@@ -12,13 +12,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
 class ApiRepository(
-    private val mapper: Mapper<PostEntity, Post>,
-    private val compactMapper: Mapper<PostEntity, Post>
+    private val mapper: Mapper<PostEntity, Post>
 ) : IApiRepository {
 
     override suspend fun getPage(page: Int): List<Post> = withContext(Dispatchers.IO) {
         transaction {
-            PostEntity.all().limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page).map(compactMapper)
+            PostEntity.all().limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page).map(mapper)
         }
     }
 
@@ -51,7 +50,7 @@ class ApiRepository(
         transaction {
             PostEntity.find { Posts.theme eq theme }
                 .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
-                .map(compactMapper)
+                .map(mapper)
         }
     }
 
@@ -59,7 +58,7 @@ class ApiRepository(
         transaction {
             PostEntity.find { Posts.author eq author }
                 .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
-                .map(compactMapper)
+                .map(mapper)
         }
     }
 }

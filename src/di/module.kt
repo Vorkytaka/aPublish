@@ -15,9 +15,8 @@ import service.IApiService
 
 val appModule = module {
     single<Mapper<PostEntity, Post>>(named("dbMapper")) { PostEntity::mapToPost }
-    single<Mapper<PostEntity, Post>>(named("dbCompactMapper")) { PostEntity::mapToPost }
     single<Mapper<Post, PostResponse>>(named("responseMapper")) { Post::mapToPostResponse }
 
-    single<IApiRepository> { ApiRepository(get(named("dbMapper")), get(named("dbCompactMapper"))) }
+    single<IApiRepository> { ApiRepository(get(named("dbMapper"))) }
     single<IApiService> { ApiService(get(), get(named("responseMapper"))) }
 }

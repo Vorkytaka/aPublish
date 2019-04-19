@@ -39,19 +39,10 @@ class ApiRepository(
                 title = post.title
                 content = post.content
                 createdDate = DateTime.now()
-                theme = post.theme
             }).id.value
         }
 
         findPostById(id)!!
-    }
-
-    override suspend fun findPostsByTheme(theme: String, page: Int): List<Post> = withContext(Dispatchers.IO) {
-        transaction {
-            PostEntity.find { Posts.theme eq theme }
-                .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
-                .map(mapper)
-        }
     }
 
     override suspend fun findPostsByAuthor(author: String, page: Int): List<Post> = withContext(Dispatchers.IO) {

@@ -8,6 +8,5 @@ data class Post(
     val title: String,
     val content: String,
     val createdDate: DateTime,
-    val theme: String?,
     val language: String?
 )

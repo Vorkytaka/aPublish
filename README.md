@@ -85,16 +85,6 @@ Response:
 code 201 and header "Location". 
 
 ---
-#### Search posts by theme
-> GET /api/theme/{theme}/{page}
-
-Parameters:
-* `theme` (required, string) - theme that you want to search
-* `page` (optional, integer, default 0) - page value
-
-Response: [Page schema](#page-schema).
-
----
 #### Search posts by author
 > GET /api/author/{author}/{page}
 

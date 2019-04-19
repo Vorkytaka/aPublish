@@ -13,7 +13,6 @@ fun PostEntity.mapToPost() =
         this.title,
         this.content,
         this.createdDate,
-        this.theme,
         this.language
     )
 
@@ -24,6 +23,5 @@ fun Post.mapToPostResponse() =
         this.title,
         this.content,
         this.createdDate.millis,
-        this.theme,
         this.language
     )

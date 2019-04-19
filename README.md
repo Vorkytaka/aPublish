@@ -96,3 +96,13 @@ Parameters:
 * `page` (optional, integer, default 0) - page value
 
 Response: [Page schema](#page-schema).
+
+---
+#### Search posts by tag
+> GET /api/tag/{tag}/{page}
+
+Parameters:
+* `tag` (required, string) - tag that you want to search
+* `page` (optional, integer, default 0) - page value
+
+Response: [Page schema](#page-schema).

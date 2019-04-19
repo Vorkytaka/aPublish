@@ -2,7 +2,7 @@ package data.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class PostResponse(
+class PostResponse(
     @JsonProperty("id")
     val id: Long,
 
@@ -19,5 +19,8 @@ data class PostResponse(
     val createdDate: Long,
 
     @JsonProperty("lang")
-    val lang: String?
+    val lang: String?,
+
+    @JsonProperty("tags")
+    val tags: Array<String>?
 )

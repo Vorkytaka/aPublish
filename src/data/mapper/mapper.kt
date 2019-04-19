@@ -13,7 +13,8 @@ fun PostEntity.mapToPost() =
         this.title,
         this.content,
         this.createdDate,
-        this.language
+        this.language,
+        this.tags.map { it.name }.toTypedArray()
     )
 
 fun Post.mapToPostResponse() =
@@ -23,5 +24,6 @@ fun Post.mapToPostResponse() =
         this.title,
         this.content,
         this.createdDate.millis,
-        this.language
+        this.language,
+        this.tags
     )

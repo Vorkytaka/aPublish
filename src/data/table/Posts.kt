@@ -11,6 +11,7 @@ object Posts : LongIdTable() {
     val content = text("content")
     val createdDate = datetime("createdDate")
     val theme = varchar("theme", 64).nullable()
+    val language = varchar("language", 2).nullable()
 }
 
 class PostEntity(
@@ -23,4 +24,5 @@ class PostEntity(
     var content by Posts.content
     var createdDate by Posts.createdDate
     var theme by Posts.theme
+    var language by Posts.language
 }

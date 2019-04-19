@@ -13,7 +13,8 @@ val dbMapper: Mapper<PostEntity, Post> = {
         this.title,
         this.content,
         this.createdDate,
-        this.theme
+        this.theme,
+        this.language
     )
 }
 
@@ -24,7 +25,8 @@ val dbCompactMapper: Mapper<PostEntity, Post> = {
         this.title,
         this.content.take(100),
         this.createdDate,
-        this.theme
+        this.theme,
+        this.language
     )
 }
 
@@ -35,6 +37,7 @@ val responseMapper: Mapper<Post, PostResponse> = {
         this.title,
         this.content,
         this.createdDate.millis,
-        this.theme
+        this.theme,
+        this.language
     )
 }

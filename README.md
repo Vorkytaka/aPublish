@@ -12,12 +12,14 @@ It's an anonymous immutable feed aggregator.
   "title": "something",
   "content": "text",
   "createdDate": 766800000,
-  "theme": "something"
+  "theme": "something",
+  "lang": "en"
 }
 ```
 * `id` is long value.
 * `createdDate` is Unix timestamp in milliseconds.
-* Fields `author` and `theme` can be `null`.
+* `lang` is 2-letter language code defined in [ISO 639](https://en.wikipedia.org/wiki/ISO_639).
+* Fields `author`, `theme` and `lang` can be `null`.
 
 
 #### Page schema:
@@ -90,7 +92,7 @@ Parameters:
 * `theme` (required, string) - theme that you want to search
 * `page` (optional, integer, default 0) - page value
 
-Response: Page schema(#page-schema).
+Response: [Page schema](#page-schema).
 
 ---
 #### Search posts by author
@@ -100,4 +102,4 @@ Parameters:
 * `author` (required, string) - author that you want to search
 * `page` (optional, integer, default 0) - page value
 
-Response: Page schema(#page-schema).
+Response: [Page schema](#page-schema).

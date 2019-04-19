@@ -19,5 +19,8 @@ data class PostResponse(
     val createdDate: Long,
 
     @JsonProperty("theme")
-    val theme: String?
+    val theme: String?,
+
+    @JsonProperty("lang")
+    val lang: String?
 )

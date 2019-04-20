@@ -12,8 +12,11 @@ It's an anonymous immutable feed aggregator.
   "title": "something",
   "content": "text",
   "createdDate": 766800000,
-  "theme": "something",
-  "lang": "en"
+  "lang": "en",
+  "tags": [
+    "life",
+    "death"
+  ]
 }
 ```
 * `id` is long value.
@@ -33,7 +36,11 @@ It's an anonymous immutable feed aggregator.
       "title": "something",
       "content": "text",
       "createdDate": 766800000,
-      "theme": "something"
+      "lang": "en",
+      "tags": [
+        "life",
+        "death"
+      ]
     }
   ],
   "hasNextPage": false
@@ -70,6 +77,9 @@ Parameters:
 * `content` (required, string) - content of this post
 * `author` (optional, string, max length 64 chars) - author of this post
 * `tags` (optional, array of strings) - tags for this post
+* `lang` (optional, string) - 2-letter language code
+
+As you can see it's the same [Post schema](#post-schema), but without fields `id` and `createdDate`.
 
 Example request:
 ```json
@@ -77,6 +87,7 @@ Example request:
   "title": "How we do some cool stuff",
   "author": "Some cool guy",
   "content": "We just do it!",
+  "lang": "en",
   "tags": [
     "life",
     "death"

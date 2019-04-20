@@ -12,6 +12,9 @@ class CreatePostRequest(
     @JsonProperty("content")
     val content: String,
 
+    @JsonProperty("lang")
+    val lang: String?,
+
     @JsonProperty("tags")
     val tags: Array<String>?
 )

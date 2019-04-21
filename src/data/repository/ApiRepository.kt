@@ -3,22 +3,22 @@ package data.repository
 import POST_ON_PAGE_COUNT
 import data.mapper.Mapper
 import data.request.CreatePostRequest
-import data.table.PostEntity
-import data.table.Posts
+import data.table.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import model.Post
+import org.jetbrains.exposed.sql.SizedCollection
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
 class ApiRepository(
-    private val mapper: Mapper<PostEntity, Post>,
-    private val compactMapper: Mapper<PostEntity, Post>
+    private val mapper: Mapper<PostEntity, Post>
 ) : IApiRepository {
 
     override suspend fun getPage(page: Int): List<Post> = withContext(Dispatchers.IO) {
         transaction {
-            PostEntity.all().limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page).map(compactMapper)
+            PostEntity.all().limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page).map(mapper)
         }
     }
 
@@ -33,33 +33,49 @@ class ApiRepository(
     }
 
     override suspend fun addPost(post: CreatePostRequest): Post = withContext(Dispatchers.IO) {
-        var id: Long = -1L
-        transaction {
-            id = (PostEntity.new {
+        val createdPost = transaction {
+            PostEntity.new {
                 author = post.author
                 title = post.title
                 content = post.content
                 createdDate = DateTime.now()
-                theme = post.theme
-            }).id.value
+                language = post.lang // todo: validate
+            }
         }
 
-        findPostById(id)!!
-    }
+        if (post.tags != null) {
+            val tags = transaction {
+                post.tags
+                    .map {
+                        TagEntity.find { Tags.name eq it }.firstOrNull() ?: TagEntity.new { name = it }
+                    }
+            }
 
-    override suspend fun findPostsByTheme(theme: String, page: Int): List<Post> = withContext(Dispatchers.IO) {
-        transaction {
-            PostEntity.find { Posts.theme eq theme }
-                .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
-                .map(compactMapper)
+            transaction {
+                createdPost.tags = SizedCollection(tags)
+            }
         }
+
+        findPostById(createdPost.id.value)!!
     }
 
     override suspend fun findPostsByAuthor(author: String, page: Int): List<Post> = withContext(Dispatchers.IO) {
         transaction {
             PostEntity.find { Posts.author eq author }
                 .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
-                .map(compactMapper)
+                .map(mapper)
+        }
+    }
+
+    override suspend fun findPostsByTag(tag: String, page: Int): List<Post> = withContext(Dispatchers.IO) {
+        transaction {
+            PostTags
+                .innerJoin(Posts)
+                .innerJoin(Tags)
+                .select { Tags.name eq tag }
+                .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
+                .map { PostEntity.wrapRow(it) }
+                .map(mapper)
         }
     }
 }

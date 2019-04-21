@@ -1,9 +1,8 @@
 package di
 
 import data.mapper.Mapper
-import data.mapper.dbCompactMapper
-import data.mapper.dbMapper
-import data.mapper.responseMapper
+import data.mapper.mapToPost
+import data.mapper.mapToPostResponse
 import data.repository.ApiRepository
 import data.repository.IApiRepository
 import data.response.PostResponse
@@ -17,11 +16,10 @@ import service.IWebService
 import service.WebService
 
 val appModule = module {
-    single<Mapper<PostEntity, Post>>(named("dbMapper")) { dbMapper }
-    single<Mapper<PostEntity, Post>>(named("dbCompactMapper")) { dbCompactMapper }
-    single<Mapper<Post, PostResponse>>(named("responseMapper")) { responseMapper }
+    single<Mapper<PostEntity, Post>>(named("dbMapper")) { PostEntity::mapToPost }
+    single<Mapper<Post, PostResponse>>(named("responseMapper")) { Post::mapToPostResponse }
 
-    single<IApiRepository> { ApiRepository(get(named("dbMapper")), get(named("dbCompactMapper"))) }
+    single<IApiRepository> { ApiRepository(get(named("dbMapper"))) }
     single<IApiService> { ApiService(get(), get(named("responseMapper"))) }
 
     single<IWebService> { WebService(get()) }

@@ -12,12 +12,17 @@ It's an anonymous immutable feed aggregator.
   "title": "something",
   "content": "text",
   "createdDate": 766800000,
-  "theme": "something"
+  "lang": "en",
+  "tags": [
+    "life",
+    "death"
+  ]
 }
 ```
 * `id` is long value.
 * `createdDate` is Unix timestamp in milliseconds.
-* Fields `author` and `theme` can be `null`.
+* `lang` is 2-letter language code defined in [ISO 639](https://en.wikipedia.org/wiki/ISO_639).
+* Fields `author`, `theme` and `lang` can be `null`.
 
 
 #### Page schema:
@@ -31,7 +36,11 @@ It's an anonymous immutable feed aggregator.
       "title": "something",
       "content": "text",
       "createdDate": 766800000,
-      "theme": "something"
+      "lang": "en",
+      "tags": [
+        "life",
+        "death"
+      ]
     }
   ],
   "hasNextPage": false
@@ -67,30 +76,27 @@ Parameters:
 * `title` (required, string, max length 64 chars) - title of this post
 * `content` (required, string) - content of this post
 * `author` (optional, string, max length 64 chars) - author of this post
-* `theme` (optional, string, max length 64 chars) - theme of this post
+* `tags` (optional, array of strings) - tags for this post
+* `lang` (optional, string) - 2-letter language code
+
+As you can see it's the same [Post schema](#post-schema), but without fields `id` and `createdDate`.
 
 Example request:
 ```json
 {
   "title": "How we do some cool stuff",
   "author": "Some cool guy",
-  "theme": "Work",
-  "content": "We just do it!"
+  "content": "We just do it!",
+  "lang": "en",
+  "tags": [
+    "life",
+    "death"
+  ]
 }
 ```
 
 Response:
 code 201 and header "Location". 
-
----
-#### Search posts by theme
-> GET /api/theme/{theme}/{page}
-
-Parameters:
-* `theme` (required, string) - theme that you want to search
-* `page` (optional, integer, default 0) - page value
-
-Response: Page schema(#page-schema).
 
 ---
 #### Search posts by author
@@ -100,4 +106,14 @@ Parameters:
 * `author` (required, string) - author that you want to search
 * `page` (optional, integer, default 0) - page value
 
-Response: Page schema(#page-schema).
+Response: [Page schema](#page-schema).
+
+---
+#### Search posts by tag
+> GET /api/tag/{tag}/{page}
+
+Parameters:
+* `tag` (required, string) - tag that you want to search
+* `page` (optional, integer, default 0) - page value
+
+Response: [Page schema](#page-schema).

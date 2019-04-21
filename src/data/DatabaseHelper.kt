@@ -2,7 +2,9 @@ package data
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import data.table.PostTags
 import data.table.Posts
+import data.table.Tags
 import io.ktor.util.KtorExperimentalAPI
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -15,6 +17,8 @@ object DatabaseHelper {
         Database.connect(createDataSource(config))
         transaction {
             SchemaUtils.create(Posts)
+            SchemaUtils.create(Tags)
+            SchemaUtils.create(PostTags)
         }
     }
 

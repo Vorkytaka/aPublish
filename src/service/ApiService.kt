@@ -30,8 +30,8 @@ class ApiService(
         return mapper(repository.addPost(post))
     }
 
-    override suspend fun findPostsByTheme(theme: String, page: Int): PageResponse {
-        val posts = repository.findPostsByTheme(theme, page)
+    override suspend fun findPostsByAuthor(author: String, page: Int): PageResponse {
+        val posts = repository.findPostsByAuthor(author, page)
         return PageResponse(
             page,
             posts.take(POST_ON_PAGE_COUNT).map(mapper),
@@ -39,8 +39,8 @@ class ApiService(
         )
     }
 
-    override suspend fun findPostsByAuthor(author: String, page: Int): PageResponse {
-        val posts = repository.findPostsByAuthor(author, page)
+    override suspend fun findPostsByTag(tag: String, page: Int): PageResponse {
+        val posts = repository.findPostsByTag(tag, page)
         return PageResponse(
             page,
             posts.take(POST_ON_PAGE_COUNT).map(mapper),

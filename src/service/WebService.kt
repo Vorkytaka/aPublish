@@ -1,5 +1,7 @@
 package service
 
+import data.request.CreatePostRequest
+import data.response.PostResponse
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.http.HttpStatusCode
 
@@ -24,5 +26,16 @@ class WebService(
                 mapOf("post" to postResponse)
             )
         }
+    }
+
+    override suspend fun newPostPage(): Any {
+        return FreeMarkerContent(
+            "newPost.ftl",
+            null
+        )
+    }
+
+    override suspend fun addPost(post: CreatePostRequest): PostResponse {
+        return apiService.addPost(post)
     }
 }

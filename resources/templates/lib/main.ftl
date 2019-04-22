@@ -5,18 +5,15 @@
         <title>${(title)!"aPublish"}</title>
 
         <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
-
-        <style>
-            * {
-               font-family: 'PT Sans', sans-serif;
-            }
-        </style>
+        <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
-        <#include "/lib/header.ftl">
+        <div id="body">
+            <#include "/lib/header.ftl">
 
-        <div>
-            <#nested>
+            <div>
+                <#nested>
+            </div>
         </div>
     </body>
     </html>

@@ -1,0 +1,8 @@
+* {
+    font-family: 'PT Sans', sans-serif;
+}
+
+#body {
+    max-width: 650px;
+    margin: 0 auto;
+}

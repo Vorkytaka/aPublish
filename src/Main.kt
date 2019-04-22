@@ -14,6 +14,8 @@ import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
 import io.ktor.freemarker.FreeMarker
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
 import io.ktor.routing.Routing
@@ -62,6 +64,10 @@ fun Application.module() {
     install(Routing) {
         api(inject<IApiService>().value)
         web(inject<IWebService>().value)
+
+        static("/static") {
+            resources("static")
+        }
     }
 }
 

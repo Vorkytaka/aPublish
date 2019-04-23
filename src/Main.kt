@@ -29,8 +29,6 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import routing.api
 import routing.web
-import service.IApiService
-import service.IWebService
 import java.util.*
 
 const val POST_ON_PAGE_COUNT = 10
@@ -72,7 +70,7 @@ fun Application.module() {
 
     install(Routing) {
         api(get())
-        web(inject<IWebService>().value)
+        web(get())
 
         static("/static") {
             resources("static")

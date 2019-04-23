@@ -1,6 +1,6 @@
 package routing
 
-import data.request.CreatePostRequest
+import data.request.NewPostRequest
 import exception.ArgumentException
 import io.ktor.application.call
 import io.ktor.http.Parameters
@@ -48,7 +48,7 @@ fun Route.web(service: IWebService) {
                     .toTypedArray()
             }
 
-            val post = CreatePostRequest(
+            val post = NewPostRequest(
                 params["author"],
                 params["title"]!!,
                 params["content"]!!,

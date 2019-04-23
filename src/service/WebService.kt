@@ -1,6 +1,6 @@
 package service
 
-import data.request.CreatePostRequest
+import data.request.NewPostRequest
 import data.response.PostResponse
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.http.HttpStatusCode
@@ -35,7 +35,7 @@ class WebService(
         )
     }
 
-    override suspend fun addPost(post: CreatePostRequest): PostResponse {
+    override suspend fun addPost(post: NewPostRequest): PostResponse {
         return apiService.addPost(post)
     }
 }

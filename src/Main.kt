@@ -19,6 +19,7 @@ import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.KtorExperimentalAPI
+import jackson.TrimModule
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import routing.api
@@ -38,6 +39,7 @@ fun Application.module() {
     install(ContentNegotiation) {
         jackson {
             configure(SerializationFeature.INDENT_OUTPUT, true)
+            registerModule(TrimModule())
         }
     }
 

@@ -15,8 +15,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import service.ApiService
 import service.IApiService
-import service.IWebService
-import service.WebService
 
 val appModule = module {
     single<Mapper<PostEntity, Post>>(named("dbMapper")) { PostEntity::mapToPost }
@@ -26,6 +24,4 @@ val appModule = module {
 
     single<IApiRepository> { ApiRepository(get(named("dbMapper"))) }
     single<IApiService> { ApiService(get(), get(named("responseMapper")), get(named("newPostValidator"))) }
-
-    single<IWebService> { WebService(get()) }
 }

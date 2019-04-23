@@ -3,6 +3,8 @@ package routing
 import data.request.NewPostRequest
 import exception.ArgumentException
 import io.ktor.application.call
+import io.ktor.freemarker.FreeMarkerContent
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
 import io.ktor.request.receive
 import io.ktor.response.respond
@@ -11,41 +13,60 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
-import service.IWebService
+import service.IApiService
 
-fun Route.web(service: IWebService) {
+fun Route.web(service: IApiService) {
     route("/") {
 
         get("/{page?}") {
             val page = call.parameters["page"]?.toIntOrNull() ?: 0
-            call.respond(service.getPage(page))
+            val pageResponse = service.getPage(page)
+            call.respond(
+                FreeMarkerContent(
+                    "page.ftl",
+                    mapOf("page" to pageResponse)
+                )
+            )
         }
 
         get("/post/{id}") {
             val id = call.parameters["id"]?.toLongOrNull()
                 ?: throw ArgumentException("id")
 
-            call.respond(service.findPostById(id))
+            val postResponse = service.findPostById(id)
+            val response: Any = if (postResponse == null) {
+                HttpStatusCode.NotFound
+            } else {
+                FreeMarkerContent(
+                    "post.ftl",
+                    mapOf("post" to postResponse)
+                )
+            }
+
+            call.respond(response)
         }
 
         get("/post") {
-            call.respond(service.newPostPage())
+            call.respond(
+                FreeMarkerContent(
+                    "newPost.ftl",
+                    null
+                )
+            )
         }
 
-        post("/post/") {
+        post("/post") {
             val params = call.receive<Parameters>()
 
-            // todo: validate params
-
-            val tagsString = params["tags"]
-
-            val tags: Array<String> = if (tagsString.isNullOrBlank()) {
-                emptyArray()
-            } else {
-                tagsString
-                    .split(",")
-                    .map(String::trim)
-                    .toTypedArray()
+            val tags: Array<String> = with(params["tags"]) {
+                if (this.isNullOrBlank()) {
+                    emptyArray()
+                } else {
+                    this
+                        .split(",")
+                        .map(String::trim)
+                        .toTypedArray()
+                }
             }
 
             val post = NewPostRequest(

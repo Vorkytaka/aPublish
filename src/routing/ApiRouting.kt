@@ -1,6 +1,6 @@
 package routing
 
-import data.request.CreatePostRequest
+import data.request.NewPostRequest
 import exception.ArgumentException
 import io.ktor.application.call
 import io.ktor.http.CacheControl
@@ -48,7 +48,7 @@ fun Route.api(service: IApiService) {
         }
 
         post("/post") {
-            val post = call.receive<CreatePostRequest>()
+            val post = call.receive<NewPostRequest>()
             val message = service.addPost(post)
             call.response.headers.append("Location", "/post/${message.id}")
             call.respond(HttpStatusCode.Created)

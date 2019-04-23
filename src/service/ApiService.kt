@@ -3,14 +3,17 @@ package service
 import POST_ON_PAGE_COUNT
 import data.mapper.Mapper
 import data.repository.IApiRepository
-import data.request.CreatePostRequest
+import data.request.NewPostRequest
 import data.response.PageResponse
 import data.response.PostResponse
+import data.validation.Validator
 import model.Post
 
 class ApiService(
     private val repository: IApiRepository,
-    private val mapper: Mapper<Post, PostResponse>
+    private val mapper: Mapper<Post, PostResponse>,
+    private val validator: Validator<NewPostRequest>
+
 ) : IApiService {
     override suspend fun getPage(page: Int): PageResponse {
         val posts = repository.getPage(page)
@@ -26,7 +29,8 @@ class ApiService(
         return if (post == null) null else mapper(post)
     }
 
-    override suspend fun addPost(post: CreatePostRequest): PostResponse {
+    override suspend fun addPost(post: NewPostRequest): PostResponse {
+        post.validator()
         return mapper(repository.addPost(post))
     }
 

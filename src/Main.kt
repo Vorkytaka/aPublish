@@ -2,6 +2,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.SerializationFeature
 import data.DatabaseConfig
 import data.DatabaseHelper
+import data.validation.ValidatorException
 import di.appModule
 import exception.ArgumentException
 import freemarker.cache.ClassTemplateLoader
@@ -23,14 +24,17 @@ import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.KtorExperimentalAPI
+import jackson.TrimModule
 import org.koin.ktor.ext.Koin
-import org.koin.ktor.ext.inject
+import org.koin.ktor.ext.get
 import routing.api
 import routing.web
 import service.IApiService
 import service.IWebService
+import java.util.*
 
 const val POST_ON_PAGE_COUNT = 10
+val LANGUAGE_CODES = Locale.getISOLanguages()
 
 @KtorExperimentalAPI
 fun Application.module() {
@@ -44,6 +48,7 @@ fun Application.module() {
         jackson {
             configure(SerializationFeature.INDENT_OUTPUT, true)
             configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true)
+            registerModule(TrimModule())
         }
     }
 
@@ -59,10 +64,14 @@ fun Application.module() {
         exception<ArgumentException> {
             call.respond(HttpStatusCode.BadRequest)
         }
+
+        exception<ValidatorException> {
+            call.respond(HttpStatusCode.BadRequest, it.message)
+        }
     }
 
     install(Routing) {
-        api(inject<IApiService>().value)
+        api(get())
         web(inject<IWebService>().value)
 
         static("/static") {

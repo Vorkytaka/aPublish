@@ -1,6 +1,7 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import data.DatabaseConfig
 import data.DatabaseHelper
+import data.validation.ValidatorException
 import di.appModule
 import exception.ArgumentException
 import io.ktor.application.Application
@@ -19,11 +20,12 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.KtorExperimentalAPI
 import org.koin.ktor.ext.Koin
-import org.koin.ktor.ext.inject
+import org.koin.ktor.ext.get
 import routing.api
-import service.IApiService
+import java.util.*
 
 const val POST_ON_PAGE_COUNT = 10
+val LANGUAGE_CODES = Locale.getISOLanguages()
 
 @KtorExperimentalAPI
 fun Application.module() {
@@ -47,12 +49,14 @@ fun Application.module() {
         exception<ArgumentException> {
             call.respond(HttpStatusCode.BadRequest)
         }
+
+        exception<ValidatorException> {
+            call.respond(HttpStatusCode.BadRequest, it.message)
+        }
     }
 
-    val service: IApiService by inject()
-
     install(Routing) {
-        api(service)
+        api(get())
     }
 }
 

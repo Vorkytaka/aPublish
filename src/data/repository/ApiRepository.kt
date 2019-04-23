@@ -2,7 +2,7 @@ package data.repository
 
 import POST_ON_PAGE_COUNT
 import data.mapper.Mapper
-import data.request.CreatePostRequest
+import data.request.NewPostRequest
 import data.table.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -32,7 +32,7 @@ class ApiRepository(
         }
     }
 
-    override suspend fun addPost(post: CreatePostRequest): Post = withContext(Dispatchers.IO) {
+    override suspend fun addPost(post: NewPostRequest): Post = withContext(Dispatchers.IO) {
         val createdPost = transaction {
             PostEntity.new {
                 author = post.author

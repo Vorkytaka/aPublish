@@ -18,7 +18,10 @@ class ApiRepository(
 
     override suspend fun getPage(page: Int): List<Post> = withContext(Dispatchers.IO) {
         transaction {
-            PostEntity.all().limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page).map(mapper)
+            PostEntity.all()
+                .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
+                .reversed()
+                .map(mapper)
         }
     }
 
@@ -63,6 +66,7 @@ class ApiRepository(
         transaction {
             PostEntity.find { Posts.author eq author }
                 .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
+                .reversed()
                 .map(mapper)
         }
     }
@@ -74,6 +78,7 @@ class ApiRepository(
                 .innerJoin(Tags)
                 .select { Tags.name eq tag }
                 .limit(POST_ON_PAGE_COUNT + 1, POST_ON_PAGE_COUNT * page)
+                .reversed()
                 .map { PostEntity.wrapRow(it) }
                 .map(mapper)
         }

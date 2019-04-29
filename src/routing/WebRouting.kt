@@ -1,6 +1,8 @@
 package routing
 
 import data.request.NewPostRequest
+import data.response.PageResponse
+import data.response.PostResponse
 import exception.ArgumentException
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
@@ -13,6 +15,9 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
+import org.commonmark.parser.Parser
+import org.commonmark.renderer.html.HtmlRenderer
+import org.commonmark.renderer.text.TextContentRenderer
 import service.IApiService
 
 fun Route.web(service: IApiService) {
@@ -20,7 +25,7 @@ fun Route.web(service: IApiService) {
 
         get("/{page?}") {
             val page = call.parameters["page"]?.toIntOrNull() ?: 0
-            val pageResponse = service.getPage(page)
+            val pageResponse = service.getPage(page).mapToText()
             call.respond(
                 FreeMarkerContent(
                     "page.ftl",
@@ -39,7 +44,7 @@ fun Route.web(service: IApiService) {
             } else {
                 FreeMarkerContent(
                     "post.ftl",
-                    mapOf("post" to postResponse)
+                    mapOf("post" to postResponse.mapToHtml())
                 )
             }
 
@@ -83,3 +88,33 @@ fun Route.web(service: IApiService) {
 
     }
 }
+
+private val parser = Parser.builder().build()
+private val textRenderer = TextContentRenderer.builder().stripNewlines(false).build()
+private val htmlRenderer = HtmlRenderer.builder().build()
+
+private fun PostResponse.mapToText() = PostResponse(
+    this.id,
+    this.author,
+    this.title,
+    textRenderer.render(parser.parse(this.content)),
+    this.createdDate,
+    this.lang,
+    this.tags
+)
+
+private fun PostResponse.mapToHtml() = PostResponse(
+    this.id,
+    this.author,
+    this.title,
+    htmlRenderer.render(parser.parse(this.content)),
+    this.createdDate,
+    this.lang,
+    this.tags
+)
+
+private fun PageResponse.mapToText() = PageResponse(
+    this.page,
+    this.posts.map { it.mapToText() },
+    this.hasNextPage
+)

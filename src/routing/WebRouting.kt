@@ -86,6 +86,15 @@ fun Route.web(service: IApiService) {
             call.respondRedirect("/post/${createdPost.id}")
         }
 
+        get("/about") {
+            call.respond(
+                FreeMarkerContent(
+                    "about.ftl",
+                    null
+                )
+            )
+        }
+
     }
 }
 

@@ -8,6 +8,18 @@
             <#if post.theme??>
                 <h6>${post.theme}</h6>
             </#if>
+            <#if post.tags?size != 0>
+                <#list post.tags as tag>
+                    <a
+                        href="#"
+                        style="
+                            background-color: #333333;
+                            color: #cccccc;
+                            text-decoration: none;
+                            padding: 0.2rem;
+                        ">${tag}</a>
+                </#list>
+            </#if>
             <p>${post.content}</p>
             <p>${post.author}</p>
             <p>${post.createdDate?number_to_datetime}</p>

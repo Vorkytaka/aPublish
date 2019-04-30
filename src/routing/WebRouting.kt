@@ -37,7 +37,7 @@ fun Route.web(service: IApiService) {
 
             call.respond(
                 FreeMarkerContent(
-                    "page.ftl",
+                    "main_page.ftl",
                     data
                 )
             )

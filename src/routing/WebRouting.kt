@@ -26,10 +26,19 @@ fun Route.web(service: IApiService) {
         get("/{page?}") {
             val page = call.parameters["page"]?.toIntOrNull() ?: 0
             val pageResponse = service.getPage(page).mapToText()
+
+            val prevPage = if (page != 0) "/${page - 1}" else null
+            val nextPage = if (pageResponse.hasNextPage) "/${page + 1}" else null
+            val data = mapOf(
+                "page" to pageResponse,
+                "prevPage" to prevPage,
+                "nextPage" to nextPage
+            )
+
             call.respond(
                 FreeMarkerContent(
                     "page.ftl",
-                    mapOf("page" to pageResponse)
+                    data
                 )
             )
         }

@@ -43,6 +43,29 @@ fun Route.web(service: IApiService) {
             )
         }
 
+        get("/author/{author}/{page?}") {
+            val author = call.parameters["author"]
+                ?: throw ArgumentException("author")
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            val pageResponse = service.findPostsByAuthor(author, page)
+
+            val prevPage = if (page != 0) "/author/$author/${page - 1}" else null
+            val nextPage = if (pageResponse.hasNextPage) "/author/$author/${page + 1}" else null
+            val data = mapOf(
+                "page" to pageResponse,
+                "prevPage" to prevPage,
+                "nextPage" to nextPage,
+                "query" to author
+            )
+
+            call.respond(
+                FreeMarkerContent(
+                    "search-page.ftl",
+                    data
+                )
+            )
+        }
+
         get("/post/{id}") {
             val id = call.parameters["id"]?.toLongOrNull()
                 ?: throw ArgumentException("id")

@@ -4,7 +4,9 @@
 
     <h1>${post.title}</h1>
 
-    <#if post.author??><p>${post.author}</p></#if>
+    <#include "/lib/created-info.ftl">
+
+    <#include "/lib/tags.ftl">
 
     <div>
         ${post.content}

@@ -5,15 +5,12 @@
         <div>
           <div>
             <h3>${post.title}</h3>
-            <#if post.theme??>
-                <h6>${post.theme}</h6>
-            </#if>
+
+            <#include "/lib/created-info.ftl">
 
             <#include "/lib/tags.ftl">
 
             <p>${post.content}</p>
-            <p>${post.author}</p>
-            <p>${post.createdDate?number_to_datetime}</p>
             <a href="/post/${post.id}">Read ></a>
           </div>
         </div>

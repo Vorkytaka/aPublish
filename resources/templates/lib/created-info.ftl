@@ -1,0 +1,1 @@
+<p>Created <#if post.author??>by <b>${post.author}</b> </#if>at: <b>${post.createdDate?number_to_datetime}</b></p>

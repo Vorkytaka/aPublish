@@ -74,11 +74,19 @@ fun Route.web(service: IApiService) {
                 }
             }
 
+            val lang = with(params["lang"]) {
+                if (this.isNullOrBlank()) {
+                    null
+                } else {
+                    this
+                }
+            }
+
             val post = NewPostRequest(
                 params["author"],
                 params["title"]!!,
                 params["content"]!!,
-                params["lang"],
+                lang,
                 tags
             )
 

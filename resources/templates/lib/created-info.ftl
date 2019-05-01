@@ -1,1 +1,1 @@
-<p>Created <#if post.author??>by <b>${post.author}</b> </#if>at: <b>${post.createdDate?number_to_datetime}</b></p>
+<p>Created <#if post.author??>by <b><a href="/author/${post.author}" style="color:#000000;">${post.author}</a></b> </#if>at: <b>${post.createdDate?number_to_datetime}</b></p>

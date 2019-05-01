@@ -6,6 +6,7 @@
         <#include "/lib/tags.ftl">
         <p>${post.content}</p>
         <a href="/post/${post.id}">Read ></a>
+        <#sep><hr noshade width="75%" align="left" /></#sep>
       </div>
     </div>
 <#else>

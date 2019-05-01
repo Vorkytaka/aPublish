@@ -26,10 +26,12 @@ object DatabaseHelper {
                 transaction {
                     PostEntity.new {
                         title = "About"
-                        content = """aPublish - it's an public, anonymous, immutable feed aggregator.
+                        content = """
+                            aPublish - it's an public, anonymous, immutable feed aggregator.
 
                             ### Links
-                            [Source code](https://github.com/Vorkytaka/aPublish)""".trimIndent()
+                            [Source code](https://github.com/Vorkytaka/aPublish)
+                            """.trimIndent()
                         createdDate = DateTime(0L)
                         language = "en"
                     }

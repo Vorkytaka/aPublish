@@ -66,6 +66,29 @@ fun Route.web(service: IApiService) {
             )
         }
 
+        get("/tag/{tag}/{page?}") {
+            val tag = call.parameters["tag"]
+                ?: throw ArgumentException("tag")
+            val page: Int = call.parameters["page"]?.toIntOrNull() ?: 0
+            val pageResponse = service.findPostsByTag(tag, page)
+
+            val prevPage = if (page != 0) "/tag/$tag/${page - 1}" else null
+            val nextPage = if (pageResponse.hasNextPage) "/tag/$tag/${page + 1}" else null
+            val data = mapOf(
+                "page" to pageResponse,
+                "prevPage" to prevPage,
+                "nextPage" to nextPage,
+                "query" to tag
+            )
+
+            call.respond(
+                FreeMarkerContent(
+                    "search-page.ftl",
+                    data
+                )
+            )
+        }
+
         get("/post/{id}") {
             val id = call.parameters["id"]?.toLongOrNull()
                 ?: throw ArgumentException("id")

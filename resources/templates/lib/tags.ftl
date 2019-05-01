@@ -18,7 +18,7 @@
     <#if post.tags?size != 0>
         <#list post.tags as tag>
             <a
-                href="#"
+                href="/tag/${tag}"
                 style="
                     background-color: #333333;
                     color: #cccccc;

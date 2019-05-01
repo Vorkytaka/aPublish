@@ -24,7 +24,7 @@ object DatabaseHelper {
 
             transaction {
                 transaction {
-                    PostEntity.new {
+                    PostEntity.findById(0L) ?: PostEntity.new {
                         title = "About"
                         content = """
                             aPublish - it's an public, anonymous, immutable feed aggregator.

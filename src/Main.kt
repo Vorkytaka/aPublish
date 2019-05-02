@@ -24,6 +24,7 @@ import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.KtorExperimentalAPI
+import jackson.HtmlCleanModule
 import jackson.TrimModule
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
@@ -46,7 +47,7 @@ fun Application.module() {
         jackson {
             configure(SerializationFeature.INDENT_OUTPUT, true)
             configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true)
-            registerModule(TrimModule())
+            registerModules(TrimModule(), HtmlCleanModule())
         }
     }
 

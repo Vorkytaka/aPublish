@@ -51,5 +51,6 @@ dependencies {
     compile "org.jetbrains.exposed:exposed:$exposed_version"
     compile "org.koin:koin-ktor:$koin_version"
     compile "com.atlassian.commonmark:commonmark:$commonmark_version"
+    compile "org.jsoup:jsoup:$jsoup_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
 }

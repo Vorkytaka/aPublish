@@ -150,7 +150,12 @@ fun Route.web(service: IApiService) {
         }
 
         get("/about") {
-            call.respondRedirect("/post/1")
+            call.respond(
+                FreeMarkerContent(
+                    "about.ftl",
+                    null
+                )
+            )
         }
 
     }
